@@ -1,5 +1,6 @@
 package com.hci4ax.aedapp;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set color of background
+        getWindow().getDecorView().setBackgroundColor(Color.DKGRAY);
         // hide the ugly navbar for phones without hardware buttons
         // calls function: onWindowFocusChanged(boolean hasFocus)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
