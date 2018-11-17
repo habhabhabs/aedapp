@@ -1,12 +1,15 @@
 package com.hci4ax.aedapp;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         AnimationSet slowFaded = new AnimationSet(true);
         final Animation slowOut = new AlphaAnimation(0.0f, 3.0f);
         slowOut.setDuration(3000);
-        slowOut.setStartOffset(3500);
+        slowOut.setStartOffset(2000);
         slowFaded.addAnimation(slowOut);
 
         AnimationSet fastFade = new AnimationSet(true);
@@ -72,7 +75,11 @@ public class MainActivity extends AppCompatActivity {
         aedImg.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                startActivity(new Intent(getApplicationContext(), AEDTutorial.class));
+                Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
+                // create the transition animation - the images in the layouts
+                // of both activities are defined with android:transitionName="robot"
+                ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "robot");
+                startActivity(tutorialAct, anim.toBundle());
                 return false;
             }
         });
