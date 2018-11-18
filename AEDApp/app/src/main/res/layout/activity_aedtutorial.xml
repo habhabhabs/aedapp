@@ -7,7 +7,7 @@
     tools:context=".AEDTutorial">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/bareChest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -22,6 +22,8 @@
         android:id="@+id/tutorial_banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
         android:scaleType="fitStart"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,29 +38,9 @@
         android:layout_marginStart="32dp"
         android:layout_marginBottom="225dp"
         android:transitionName="aedImage"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintBottom_toBottomOf="@+id/bareChest"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/aedfullblown" />
-
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/trainerlpads" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:srcCompat="@drawable/trainerrpads" />
 
     <TextView
         android:id="@+id/instructions_header"
@@ -73,14 +55,84 @@
         app:layout_constraintTop_toBottomOf="@+id/tutorial_banner" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:id="@+id/prompter"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
         android:text="(prompter)"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructions_header" />
+
+    <LinearLayout
+        android:id="@+id/rpadDraggable"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/bareChest"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/rpadDraggableImg"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/bareChest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/trainerlpads" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lpadDraggable"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/bareChest"
+        app:layout_constraintEnd_toStartOf="@+id/rpadDraggable">
+
+        <ImageView
+            android:id="@+id/lpadDraggableImg"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/bareChest"
+            app:layout_constraintEnd_toStartOf="@+id/rpadDraggableImg"
+            app:srcCompat="@drawable/trainerrpads" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lpadDrop"
+        android:layout_width="70dp"
+        android:layout_height="97dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="110dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/bareChest"
+        app:layout_constraintStart_toStartOf="@+id/bareChest" >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rpadDrop"
+        android:layout_width="70dp"
+        android:layout_height="97dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/bareChest"
+        app:layout_constraintEnd_toEndOf="@+id/bareChest" />
 
 </android.support.constraint.ConstraintLayout>
