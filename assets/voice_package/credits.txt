@@ -1,2 +1,4 @@
 speech: amazon polly
 click_sound.mp3: CC Attribution 3.0 http://soundbible.com/1280-Click-On.html
+pressbutton_sound.mp3: CC Attr 3.0 http://soundbible.com/772-Button.html
+siren_sound.mp3: Public Domain http://soundbible.com/1577-Siren-Noise.html

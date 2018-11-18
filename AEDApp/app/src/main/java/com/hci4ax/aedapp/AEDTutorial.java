@@ -1,7 +1,6 @@
 package com.hci4ax.aedapp;
 
 import android.content.ClipData;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -21,21 +20,25 @@ public class AEDTutorial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aedtutorial);
 
-        // set color of background to gray
-        getWindow().getDecorView().setBackgroundColor(Color.DKGRAY);
         // hide the ugly navbar for phones without hardware buttons
         // calls function: onWindowFocusChanged(boolean hasFocus)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         // add code below
-        final TextView instPrompter = (TextView) findViewById(R.id.prompter);
-        final ImageView lpadDraggable = (ImageView) findViewById(R.id.lpadDraggableImg);
-        final ImageView rpadDraggable = (ImageView) findViewById(R.id.rpadDraggableImg);
-        final LinearLayout lpadDrop = (LinearLayout) findViewById(R.id.lpadDrop);
-        final LinearLayout rpadDrop = (LinearLayout) findViewById(R.id.rpadDrop);
-
         // define draggables
+        TextView instPrompter = (TextView) findViewById(R.id.prompter);
+        ImageView lpadDraggable = (ImageView) findViewById(R.id.lpadDraggableImg);
+        ImageView rpadDraggable = (ImageView) findViewById(R.id.rpadDraggableImg);
+        LinearLayout lpadDrop = (LinearLayout) findViewById(R.id.lpadDrop);
+        LinearLayout rpadDrop = (LinearLayout) findViewById(R.id.rpadDrop);
+
         final Handler handler = new Handler();
+        aedTutorial(handler, instPrompter, lpadDraggable, rpadDraggable, lpadDrop, rpadDrop);
+
+
+    }
+
+    private void aedTutorial(final Handler handler, final TextView instPrompter, final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) {
         MediaPlayer.create(AEDTutorial.this, R.raw.speech1_hiimannie).start();
         instPrompter.setText("Hi, I'm Annie.");
         handler.postDelayed(new Runnable() {
@@ -75,7 +78,6 @@ public class AEDTutorial extends AppCompatActivity {
                         }, 1500); }
                 }, 2000); }
         }, 2000);
-
     }
 
     // code required to hide the navbar when user interacting with screen
@@ -120,7 +122,7 @@ public class AEDTutorial extends AppCompatActivity {
                     oldparent.removeView(view);
                     LinearLayout newParent = (LinearLayout) v;
                     newParent.addView(view);
-                    MediaPlayer.create(AEDTutorial.this, R.raw.click_sound).start();
+                    MediaPlayer.create(AEDTutorial.this, R.raw.click_sound).start(); // click sound
                     break;
             }
             return true;

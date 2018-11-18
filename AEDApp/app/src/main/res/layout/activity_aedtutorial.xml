@@ -32,12 +32,12 @@
         app:srcCompat="@drawable/aed_cpraed_tut_banner" />
 
     <ImageView
-        android:id="@+id/aed"
+        android:id="@+id/aedImg"
         android:layout_width="143dp"
         android:layout_height="198dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="225dp"
-        android:transitionName="aedImage"
+        android:transitionName="aedImg"
         app:layout_constraintBottom_toBottomOf="@+id/bareChest"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/aedfullblown" />
