@@ -14,11 +14,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class AEDTutorial extends AppCompatActivity {
+    private static CopyOnWriteArrayList<Thread> runningThreads;
+    TextView instPrompter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // start onCreate
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aedtutorial);
+
+        instPrompter = (TextView) findViewById(R.id.prompter);
+        runningThreads = new CopyOnWriteArrayList<Thread>();
 
         // hide the ugly navbar for phones without hardware buttons
         // calls function: onWindowFocusChanged(boolean hasFocus)
@@ -26,63 +36,101 @@ public class AEDTutorial extends AppCompatActivity {
 
         // add code below
         // define draggables
-        TextView instPrompter = (TextView) findViewById(R.id.prompter);
         ImageView lpadDraggable = (ImageView) findViewById(R.id.lpadDraggableImg);
         ImageView rpadDraggable = (ImageView) findViewById(R.id.rpadDraggableImg);
         LinearLayout lpadDrop = (LinearLayout) findViewById(R.id.lpadDrop);
         LinearLayout rpadDrop = (LinearLayout) findViewById(R.id.rpadDrop);
 
-        final Handler handler = new Handler();
-        aedTutorial(handler, instPrompter, lpadDraggable, rpadDraggable, lpadDrop, rpadDrop);
 
+        try {
+            aedTutorial(lpadDraggable, rpadDraggable, lpadDrop, rpadDrop);
 
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        // end onCreate
     }
 
-    private void aedTutorial(final Handler handler, final TextView instPrompter, final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) {
-        MediaPlayer.create(AEDTutorial.this, R.raw.speech1_hiimannie).start();
-        instPrompter.setText("Hi, I'm Annie.");
-        handler.postDelayed(new Runnable() {
+    private void aedTutorial(final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) throws InterruptedException {
+        // start aedTutorial
+        final Runnable speech1 = new Runnable() { // TODO: delay 2000ms before moving on
+            @Override
+            public void run() {
+                MediaPlayer.create(AEDTutorial.this, R.raw.speech1_hiimannie).start();
+                instPrompter.setText("Hi, I'm Annie.");
+            }
+        };
+        final Runnable speech2 = new Runnable() { // TODO: delay 2000ms before moving on
             @Override
             public void run() {
                 MediaPlayer.create(AEDTutorial.this, R.raw.speech2_welcometothistutorial).start();
                 instPrompter.setText("Welcome to this tutorial.");
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MediaPlayer.create(AEDTutorial.this, R.raw.speech3_inthistutorial).start();
-                        instPrompter.setText("In this tutorial");
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                MediaPlayer.create(AEDTutorial.this, R.raw.speech4_iamgoingtoshowyouhowtousetheaed).start();
-                                instPrompter.setText("I am going to show you how to use the AED.");
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
-                                        animation.setDuration(500); // duration - half a second
-                                        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
-                                        animation.setRepeatCount(5);
-                                        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
-                                        lpadDraggable.startAnimation(animation);
-                                        rpadDraggable.startAnimation(animation);
+            }
+        };
+        final Runnable speech3 = new Runnable() { // TODO: delay 1500ms before moving on
+            @Override
+            public void run() {
+                MediaPlayer.create(AEDTutorial.this, R.raw.speech3_inthistutorial).start();
+                instPrompter.setText("In this tutorial");
+            }
+        };
+        final Runnable speech4 = new Runnable() { // TODO: delay 4000ms before moving on
+            @Override
+            public void run() {
+                MediaPlayer.create(AEDTutorial.this, R.raw.speech4_iamgoingtoshowyouhowtousetheaed).start();
+                instPrompter.setText("I am going to show you how to use the AED.");
+            }
+        };
+        final Runnable speech5 = new Runnable() {
+            @Override
+            public void run() {
+                Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
+                animation.setDuration(500); // duration - half a second
+                animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+                animation.setRepeatCount(5);
+                animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+                lpadDraggable.startAnimation(animation);
+                rpadDraggable.startAnimation(animation);
 
-                                        MediaPlayer.create(AEDTutorial.this, R.raw.speech5_holdanddragthetwoaedpads).start();
-                                        instPrompter.setText("Hold and drag the two AED pads, to the body part as shown below.");
-                                        lpadDrop.setOnDragListener(dragListener);
-                                        rpadDrop.setOnDragListener(dragListener);
-                                        lpadDraggable.setOnLongClickListener(longClickListener);
-                                        rpadDraggable.setOnLongClickListener(longClickListener);
-                                    }
-                                }, 4000); }
-                        }, 1500); }
-                }, 2000); }
-        }, 2000);
+                MediaPlayer.create(AEDTutorial.this, R.raw.speech5_holdanddragthetwoaedpads).start();
+                instPrompter.setText("Hold and drag the two AED pads, to the body part as shown below.");
+                lpadDrop.setOnDragListener(dragListener);
+                rpadDrop.setOnDragListener(dragListener);
+                lpadDraggable.setOnLongClickListener(longClickListener);
+                rpadDraggable.setOnLongClickListener(longClickListener);
+
+            }
+        };
+        // execute speeches
+        final Thread speeches = new Thread() {
+            public void run() {
+                try {
+                    runOnUiThread(speech1);
+                    Thread.sleep(2000);
+                    runOnUiThread(speech2);
+                    Thread.sleep(2000);
+                    runOnUiThread(speech3);
+                    Thread.sleep(1500);
+                    runOnUiThread(speech4);
+                    Thread.sleep(4000);
+                    runOnUiThread(speech5);
+                    Thread.sleep(4000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        };
+        runningThreads.add(speeches);
+        speeches.start();
+
+        // end aedTutorial
     }
 
     // code required to hide the navbar when user interacting with screen
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+        // start onWindowFocusChanged
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -93,6 +141,7 @@ public class AEDTutorial extends AppCompatActivity {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+        // end onWindowFocusChanged
     }
 
     // when user initiate long click, start drag (L/R AED pads)
@@ -100,6 +149,7 @@ public class AEDTutorial extends AppCompatActivity {
         @Override
         public boolean onLongClick(View v) {
             ClipData data = ClipData.newPlainText("","");
+            MediaPlayer.create(AEDTutorial.this, R.raw.sound_tear).start();
             View.DragShadowBuilder myShadowBuilder = new View.DragShadowBuilder(v);
             v.startDrag(data, myShadowBuilder,v,0);
             return true;
@@ -110,6 +160,7 @@ public class AEDTutorial extends AppCompatActivity {
     View.OnDragListener dragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
+            // start dragListener
             int dragEvent = event.getAction();
             final View view = (View) event.getLocalState();
             switch(dragEvent) {
@@ -126,6 +177,7 @@ public class AEDTutorial extends AppCompatActivity {
                     break;
             }
             return true;
+            // end dragListener
         }
     };
 }

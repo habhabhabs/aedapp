@@ -1,9 +1,11 @@
 package com.hci4ax.aedapp;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +18,9 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    // enable the vibration in this activity
+    Vibrator vibrator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         // hide the ugly navbar for phones without hardware buttons
         // calls function: onWindowFocusChanged(boolean hasFocus)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         // fade in the words to start the aed tutorial
         AnimationSet slowFade = new AnimationSet(true);
@@ -84,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 // create the transition animation - the images in the layouts
                 // of both activities are defined with android:transitionName="robot"
                 ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "aedImg");
+                vibrator.vibrate(100);
                 startActivity(tutorialAct, anim.toBundle());
                 return false;
             }
@@ -96,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 // create the transition animation - the images in the layouts
                 // of both activities are defined with android:transitionName="robot"
                 ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this);
+                vibrator.vibrate(100);
                 startActivity(why, anim.toBundle());
                 return false;
             }
