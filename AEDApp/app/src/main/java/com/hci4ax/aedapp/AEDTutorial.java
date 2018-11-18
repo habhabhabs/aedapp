@@ -53,6 +53,7 @@ public class AEDTutorial extends AppCompatActivity {
 
     private void aedTutorial(final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) throws InterruptedException {
         // start aedTutorial
+        Thread speeches;
         final Runnable speech1 = new Runnable() { // TODO: delay 2000ms before moving on
             @Override
             public void run() {
@@ -102,7 +103,7 @@ public class AEDTutorial extends AppCompatActivity {
             }
         };
         // execute speeches
-        final Thread speeches = new Thread() {
+        speeches = new Thread() {
             public void run() {
                 try {
                     runOnUiThread(speech1);
@@ -149,7 +150,7 @@ public class AEDTutorial extends AppCompatActivity {
         @Override
         public boolean onLongClick(View v) {
             ClipData data = ClipData.newPlainText("","");
-            MediaPlayer.create(AEDTutorial.this, R.raw.sound_tear).start();
+            MediaPlayer.create(AEDTutorial.this, R.raw.sound_tear).start(); // tearing sound
             View.DragShadowBuilder myShadowBuilder = new View.DragShadowBuilder(v);
             v.startDrag(data, myShadowBuilder,v,0);
             return true;
