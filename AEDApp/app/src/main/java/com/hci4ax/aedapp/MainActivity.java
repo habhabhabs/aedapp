@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         fastIn.setDuration(1500);
         fastFade.addAnimation(fastIn);
 
-        MediaPlayer.create(MainActivity.this, R.raw.speechintro_welcome).start();
+        final MediaPlayer intro = MediaPlayer.create(MainActivity.this, R.raw.speechintro_welcome);
+        intro.start();
         // objects to animate
         final ImageView headerImage = (ImageView) findViewById(R.id.headerImage);
         headerImage.startAnimation(fastFade); // entry fade - fast
@@ -82,31 +83,37 @@ public class MainActivity extends AppCompatActivity {
         startGameText.startAnimation(slowFade); // entry fade - slow
         aedImg.startAnimation(blinking);
 
-
-        // click button to go to next activity (demonstration of aed)
-        aedImg.setOnTouchListener(new View.OnTouchListener() {
+        // finish playing intro
+        intro.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
-                // create the transition animation - the images in the layouts
-                // of both activities are defined with android:transitionName="robot"
-                ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "aedImg");
-                vibrator.vibrate(100);
-                startActivity(tutorialAct, anim.toBundle());
-                return false;
-            }
-        });
+            public void onCompletion(MediaPlayer mp) {
+                intro.release();
+                // click button to go to next activity (demonstration of aed)
+                aedImg.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
+                        // create the transition animation - the images in the layouts
+                        // of both activities are defined with android:transitionName="robot"
+                        ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "aedImg");
+                        vibrator.vibrate(100);
+                        startActivity(tutorialAct, anim.toBundle());
+                        return false;
+                    }
+                });
 
-        introFooter1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent why = new Intent(getApplicationContext(), WhyLearnAED.class);
-                // create the transition animation - the images in the layouts
-                // of both activities are defined with android:transitionName="robot"
-                ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this);
-                vibrator.vibrate(100);
-                startActivity(why, anim.toBundle());
-                return false;
+                introFooter1.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        Intent why = new Intent(getApplicationContext(), WhyLearnAED.class);
+                        // create the transition animation - the images in the layouts
+                        // of both activities are defined with android:transitionName="robot"
+                        ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this);
+                        vibrator.vibrate(100);
+                        startActivity(why, anim.toBundle());
+                        return false;
+                    }
+                });
             }
         });
     }

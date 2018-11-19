@@ -3,6 +3,7 @@
     package="com.hci4ax.aedapp">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -21,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".WhyLearnAED" />
-        <activity android:name=".AEDTutorial"></activity>
+        <activity android:name=".AEDTutorial" />
+        <activity android:name=".CPRTutorial"></activity>
     </application>
 
 </manifest>
