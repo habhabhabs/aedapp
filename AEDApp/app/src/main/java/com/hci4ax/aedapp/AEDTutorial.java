@@ -53,9 +53,11 @@ public class AEDTutorial extends AppCompatActivity {
         // end onCreate
     }
 
+    Runnable speech1, speech2, speech3, speech4, speech5;
+
     private void aedTutorial(final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) throws InterruptedException {
         // start aedTutorial
-        final Runnable speech1 = new Runnable() { // TODO: delay 2000ms before moving on
+        speech1 = new Runnable() { // TODO: delay 2000ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech1audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech1_hiimannie);
@@ -69,7 +71,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        final Runnable speech2 = new Runnable() { // TODO: delay 2000ms before moving on
+        speech2 = new Runnable() { // TODO: delay 2000ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech2audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech2_welcometothistutorial);
@@ -83,7 +85,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        final Runnable speech3 = new Runnable() { // TODO: delay 1500ms before moving on
+        speech3 = new Runnable() { // TODO: delay 1500ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech3audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech3_inthistutorial);
@@ -97,7 +99,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        final Runnable speech4 = new Runnable() { // TODO: delay 4000ms before moving on
+        speech4 = new Runnable() { // TODO: delay 4000ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech4audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech4_iamgoingtoshowyouhowtousetheaed);
@@ -111,7 +113,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        final Runnable speech5 = new Runnable() {
+        speech5 = new Runnable() {
             @Override
             public void run() {
                 Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
@@ -124,7 +126,7 @@ public class AEDTutorial extends AppCompatActivity {
 
                 final MediaPlayer speech5Audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech5_holdanddragthetwoaedpads);
                 speech5Audio.start();
-                instPrompter.setText("Hold and drag the two AED pads, to the body part as shown below.");
+                instPrompter.setText("Hold and drag the two AED pads, to the body as shown below.");
                 lpadDrop.setOnDragListener(dragAEDPadsListener);
                 rpadDrop.setOnDragListener(dragAEDPadsListener);
                 lpadDraggable.setOnLongClickListener(longClickListener);
@@ -135,18 +137,15 @@ public class AEDTutorial extends AppCompatActivity {
                         speech5Audio.release();
                     }
                 });
-
             }
         };
 
-
         // execute speeches
         handler.postDelayed(speech1, 0);
-        handler.postDelayed(speech2, 2500);
-        handler.postDelayed(speech3, 4500);
-        handler.postDelayed(speech4, 5500);
-        handler.postDelayed(speech5, 9000);
-
+        handler.postDelayed(speech2, 2000);
+        handler.postDelayed(speech3, 4000);
+        handler.postDelayed(speech4, 5000);
+        handler.postDelayed(speech5, 8500);
         // end aedTutorial
     }
 
@@ -223,6 +222,10 @@ public class AEDTutorial extends AppCompatActivity {
                                 correctSound.release();
 
                                 // TODO: need to figure out how to remove
+                                handler.removeCallbacks(speech1);
+                                handler.removeCallbacks(speech2);
+                                handler.removeCallbacks(speech3);
+                                handler.removeCallbacks(speech4);
                             }
                         });
                     }
