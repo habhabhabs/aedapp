@@ -1,7 +1,10 @@
 package com.hci4ax.aedapp;
 
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -44,34 +47,65 @@ public class AEDTutorial extends AppCompatActivity {
         lpadDrop = (LinearLayout) findViewById(R.id.lpadDrop);
         rpadDrop = (LinearLayout) findViewById(R.id.rpadDrop);
 
-
-        try {
-            aedTutorial(lpadDraggable, rpadDraggable, lpadDrop, rpadDrop);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+        aedTutorial0();
         // end onCreate
     }
 
-    Runnable speech1, speech2, speech3, speech4, speech5;
-
-    private void aedTutorial(final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) throws InterruptedException {
-        // start aedTutorial
-        speech1 = new Runnable() { // TODO: delay 2000ms before moving on
+    Runnable t0speech1;
+    // step 0: powering on the aed
+    private void aedTutorial0() {
+        t0speech1 = new Runnable() {
             @Override
             public void run() {
                 final MediaPlayer speech1audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech1_hiimannie);
                 speech1audio.start();
                 instPrompter.setText("Hi, I'm Annie.");
                 speech1audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @SuppressLint("WrongConstant")
                     @Override
                     public void onCompletion(MediaPlayer mp) {
+                        final View powerCircle = (View) findViewById(R.id.powerCircle);
+                        powerCircle.setVisibility(View.VISIBLE);
+                        final ObjectAnimator objAnimator = ObjectAnimator.ofFloat(powerCircle, "alpha",0f,1f);
+                        objAnimator.setDuration(1000);
+                        objAnimator.setRepeatMode(Animation.REVERSE);
+                        objAnimator.setRepeatCount(Animation.INFINITE);
+                        objAnimator.start();
                         speech1audio.release();
+                        instPrompter.setText("To begin this tutorial, press the green Power button located on the AED.");
+                        final MediaPlayer speech0audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech0_tobeginthistutorialpressthegreenpowerbuttonlocated);
+                        speech0audio.start();
+                        powerCircle.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final MediaPlayer buttonPress = MediaPlayer.create(AEDTutorial.this, R.raw.sound_pressbutton);
+                                buttonPress.start();
+                                objAnimator.end();
+                                long pattern[] = {0,50,0};
+                                vibrator.vibrate(pattern,-1);
+                                powerCircle.setVisibility(View.INVISIBLE);
+                                buttonPress.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        powerCircle.setOnClickListener(null);
+                                        aedTutorial1(lpadDraggable, rpadDraggable, lpadDrop, rpadDrop);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
         };
-        speech2 = new Runnable() { // TODO: delay 2000ms before moving on
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(t0speech1, 0);
+    }
+
+    Runnable t1Speech1, t1Speech2, t1Speech3, t1Speech4;
+    // step 1: paste the aed pads
+    private void aedTutorial1(final ImageView lpadDraggable, final ImageView rpadDraggable, final LinearLayout lpadDrop, final LinearLayout rpadDrop) {
+        // start aedTutorial1
+        t1Speech1 = new Runnable() { // TODO: delay 2000ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech2audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech2_welcometothistutorial);
@@ -85,7 +119,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        speech3 = new Runnable() { // TODO: delay 1500ms before moving on
+        t1Speech2 = new Runnable() { // TODO: delay 1500ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech3audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech3_inthistutorial);
@@ -99,7 +133,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        speech4 = new Runnable() { // TODO: delay 4000ms before moving on
+        t1Speech3 = new Runnable() { // TODO: delay 4000ms before moving on
             @Override
             public void run() {
                 final MediaPlayer speech4audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech4_iamgoingtoshowyouhowtousetheaed);
@@ -113,7 +147,7 @@ public class AEDTutorial extends AppCompatActivity {
                 });
             }
         };
-        speech5 = new Runnable() {
+        t1Speech4 = new Runnable() {
             @Override
             public void run() {
                 Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
@@ -140,13 +174,14 @@ public class AEDTutorial extends AppCompatActivity {
             }
         };
 
+        // purge existing instruction set from zeroth step
+        handler.removeCallbacksAndMessages(null);
         // execute speeches
-        handler.postDelayed(speech1, 0);
-        handler.postDelayed(speech2, 2000);
-        handler.postDelayed(speech3, 4000);
-        handler.postDelayed(speech4, 5000);
-        handler.postDelayed(speech5, 8500);
-        // end aedTutorial
+        handler.postDelayed(t1Speech1, 0);
+        handler.postDelayed(t1Speech2, 2000);
+        handler.postDelayed(t1Speech3, 3000);
+        handler.postDelayed(t1Speech4, 6000);
+        // end aedTutorial1
     }
 
     // code required to hide the navbar when user interacting with screen
@@ -214,6 +249,8 @@ public class AEDTutorial extends AppCompatActivity {
                         vibrator.vibrate(pattern,-1);
                         final MediaPlayer correctPrompt = MediaPlayer.create(AEDTutorial.this, R.raw.speech6_excellent);
                         correctPrompt.start();
+                        lpadDraggable.setOnLongClickListener(null);
+                        rpadDraggable.setOnLongClickListener(null);
                         instPrompter.setText("Excellent!");
                         correctSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
@@ -221,11 +258,7 @@ public class AEDTutorial extends AppCompatActivity {
                                 correctPrompt.release();
                                 correctSound.release();
 
-                                // TODO: need to figure out how to remove
-                                handler.removeCallbacks(speech1);
-                                handler.removeCallbacks(speech2);
-                                handler.removeCallbacks(speech3);
-                                handler.removeCallbacks(speech4);
+                                AEDTutorial2();
                             }
                         });
                     }
@@ -262,6 +295,7 @@ public class AEDTutorial extends AppCompatActivity {
                             public void onCompletion(MediaPlayer mp) {
                                 correctPrompt.release();
                                 correctSound.release();
+
                             }
                         });
                     }
@@ -285,4 +319,184 @@ public class AEDTutorial extends AppCompatActivity {
             // end dragListener
         }
     };
+
+    Runnable t2Speech1, t2speech2;
+    // step 2: after sticking pads, do what the aed needs to do
+    private void AEDTutorial2() {
+        // start AEDTutorial2
+        t2Speech1 = new Runnable() {
+            @Override
+            public void run() {
+                final MediaPlayer speech9audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech9_aedpadsdetected);
+                speech9audio.start();
+                instPrompter.setText("AED Pads detected.");
+                speech9audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        speech9audio.release();
+                        final MediaPlayer speech10audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech10_analyzingheartrhythmdonottouchpatient);
+                        speech10audio.start();
+                        instPrompter.setText("Analyzing heart rhythm, do not touch patient!");
+                        speech10audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                final MediaPlayer speech11audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech11_irepeatdonottouchpatient);
+                                speech11audio.start();
+                                instPrompter.setText("I repeat, do not touch patient!");
+                                speech11audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        speech11audio.release();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        };
+
+        t2speech2 = new Runnable() {
+            @Override
+            public void run() {
+                final MediaPlayer speech12audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech12_shockadvised);
+                speech12audio.start();
+                instPrompter.setText("Shock advised.");
+                speech12audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @SuppressLint("WrongConstant")
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        speech12audio.release();
+                        final MediaPlayer speech13audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech13_stayawayfrompatientandpresstheredshock);
+                        speech13audio.start();
+                        instPrompter.setText("Stay away from patient, and press the red \"Shock\" button on the AED to begin.");
+                        final View shockCircle = (View) findViewById(R.id.shockCircle);
+                        shockCircle.setVisibility(View.VISIBLE);
+                        final ObjectAnimator objAnimator = ObjectAnimator.ofFloat(shockCircle, "alpha",0f,1f);
+                        objAnimator.setDuration(1000);
+                        objAnimator.setRepeatMode(Animation.REVERSE);
+                        objAnimator.setRepeatCount(Animation.INFINITE);
+                        objAnimator.start();
+                        speech13audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                speech13audio.release();
+                                shockCircle.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        long pattern[] = {0,50,0};
+                                        vibrator.vibrate(pattern,-1);
+                                        final MediaPlayer buttonPress = MediaPlayer.create(AEDTutorial.this, R.raw.sound_pressbutton);
+                                        buttonPress.start();
+                                        objAnimator.end();
+                                        shockCircle.setVisibility(View.INVISIBLE);
+                                        buttonPress.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                            @Override
+                                            public void onCompletion(MediaPlayer mp) {
+                                                buttonPress.release();
+                                                AEDTutorial3();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        };
+
+        // purge existing instruction set from first step
+        handler.removeCallbacksAndMessages(null);
+        // load second step tutorial
+        handler.postDelayed(t2Speech1, 0);
+        handler.postDelayed(t2speech2, 8300);
+
+        // end AEDTutorial2
+    }
+
+    Runnable t3speech1, t3speech2;
+    // step 3: after clicking shock button, prepare to shock.
+    private void AEDTutorial3() {
+        t3speech1 = new Runnable() {
+            @Override
+            public void run() {
+                final MediaPlayer speech10audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech10_analyzingheartrhythmdonottouchpatient);
+                speech10audio.start();
+                instPrompter.setText("Analyzing heart rhythm, do not touch patient!");
+                speech10audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        speech10audio.release();
+                        final MediaPlayer speech14audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech14_standbypreparingtoshock);
+                        speech14audio.start();
+                        instPrompter.setText("Stand by. Preparing to shock!");
+                        speech14audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                speech14audio.release();
+                                final MediaPlayer speech15audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech15_administeringshocknowpleasestayclearofpatient);
+                                speech15audio.start();
+                                instPrompter.setText("Administering shock now. PLEASE STAY CLEAR OF PATIENT!");
+                                speech15audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        speech15audio.release();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        };
+
+        t3speech2 = new Runnable() {
+            @Override
+            public void run() {
+                final MediaPlayer defibsound = MediaPlayer.create(AEDTutorial.this, R.raw.sound_defibcharge);
+                defibsound.start();
+                instPrompter.setText("(AED sounds)");
+                vibrator.vibrate(5000);
+                defibsound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        defibsound.release();
+                        final ImageView bareChest = (ImageView) findViewById(R.id.bareChest);
+                        ObjectAnimator rotate = ObjectAnimator.ofFloat(bareChest, "rotation", 0f, 5f, 0f, -5f, 0f); // rotate o degree then 20 degree and so on for one loop of rotation.
+                        rotate.setRepeatCount(10); // repeat the loop 20 times
+                        rotate.setDuration(100); // animation play time 100 ms
+                        rotate.start();
+                        vibrator.vibrate(500);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        instPrompter.setText("Shock delivered. You may continue your CPR compressions until the paramedic arrives.");
+                        final MediaPlayer speech16audio = MediaPlayer.create(AEDTutorial.this, R.raw.speech16_shockdeliveredyoumaycontinueyourcprcompressions);
+                        speech16audio.start();
+                        speech16audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                finish();
+                            }
+                        });
+                    }
+                });
+            }
+        };
+
+        // purge existing instruction set from second step
+        handler.removeCallbacksAndMessages(null);
+        // load third step tutorial
+        handler.postDelayed(t3speech1, 0);
+        handler.postDelayed(t3speech2, 8200);
+    }
+
 }
