@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/aed_cpraed_tut_banner" />
+        app:srcCompat="@drawable/aed_aed_tut_banner" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/aedImgView"

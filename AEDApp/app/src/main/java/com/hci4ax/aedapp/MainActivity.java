@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 introFooter1.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        Intent why = new Intent(getApplicationContext(), WhyLearnAED.class);
+                        Intent why = new Intent(getApplicationContext(), CPRTutorial.class);
                         // create the transition animation - the images in the layouts
                         // of both activities are defined with android:transitionName="robot"
                         ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this);

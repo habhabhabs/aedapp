@@ -463,9 +463,9 @@ public class AEDTutorial extends AppCompatActivity {
                     public void onCompletion(MediaPlayer mp) {
                         defibsound.release();
                         final ImageView bareChest = (ImageView) findViewById(R.id.bareChest);
-                        ObjectAnimator rotate = ObjectAnimator.ofFloat(bareChest, "rotation", 0f, 5f, 0f, -5f, 0f); // rotate o degree then 20 degree and so on for one loop of rotation.
-                        rotate.setRepeatCount(10); // repeat the loop 20 times
-                        rotate.setDuration(100); // animation play time 100 ms
+                        ObjectAnimator rotate = ObjectAnimator.ofFloat(bareChest, "rotation", 0f, 2f, 0f, -2f, 0f); // rotate o degree then 20 degree and so on for one loop of rotation.
+                        rotate.setRepeatCount(5);
+                        rotate.setDuration(100);
                         rotate.start();
                         vibrator.vibrate(500);
                         try {
