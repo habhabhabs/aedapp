@@ -11,6 +11,7 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -163,8 +164,8 @@ public class AEDTutorial extends AppCompatActivity {
                 instPrompter.setText("Hold and drag the two AED pads, to the body as shown below.");
                 lpadDrop.setOnDragListener(dragAEDPadsListener);
                 rpadDrop.setOnDragListener(dragAEDPadsListener);
-                lpadDraggable.setOnLongClickListener(longClickListener);
-                rpadDraggable.setOnLongClickListener(longClickListener);
+                lpadDraggable.setOnTouchListener(onTouchListener);
+                rpadDraggable.setOnTouchListener(onTouchListener);
                 speech5Audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -202,9 +203,9 @@ public class AEDTutorial extends AppCompatActivity {
     }
 
     // when user initiate long click, start drag (L/R AED pads)
-    View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
-        public boolean onLongClick(View v) {
+        public boolean onTouch(View v, MotionEvent event) {
             ClipData data = ClipData.newPlainText("","");
             final MediaPlayer tearSound = MediaPlayer.create(AEDTutorial.this, R.raw.sound_tear); // tearing sound
             tearSound.start();
@@ -217,6 +218,13 @@ public class AEDTutorial extends AppCompatActivity {
                 }
             });
             return true;
+        }
+    };
+
+    View.OnTouchListener disableDrag = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
         }
     };
 
@@ -249,15 +257,14 @@ public class AEDTutorial extends AppCompatActivity {
                         vibrator.vibrate(pattern,-1);
                         final MediaPlayer correctPrompt = MediaPlayer.create(AEDTutorial.this, R.raw.speech6_excellent);
                         correctPrompt.start();
-                        lpadDraggable.setOnLongClickListener(null);
-                        rpadDraggable.setOnLongClickListener(null);
+                        lpadDraggable.setOnTouchListener(disableDrag);
+                        rpadDraggable.setOnTouchListener(disableDrag);
                         instPrompter.setText("Excellent!");
                         correctSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
                                 correctPrompt.release();
                                 correctSound.release();
-
                                 AEDTutorial2();
                             }
                         });
@@ -499,4 +506,10 @@ public class AEDTutorial extends AppCompatActivity {
         handler.postDelayed(t3speech2, 8200);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        handler.removeCallbacksAndMessages(null);
+        finish();
+    }
 }

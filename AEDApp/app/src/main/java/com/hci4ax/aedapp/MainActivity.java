@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
+
         // fade in the words to start the aed tutorial
         AnimationSet slowFade = new AnimationSet(true);
         final Animation slowIn = new AlphaAnimation(0.0f, 3.0f);

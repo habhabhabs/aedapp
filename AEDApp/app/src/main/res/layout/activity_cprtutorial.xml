@@ -51,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:cropToPadding="true"
         android:scaleType="fitStart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,13 +61,46 @@
 
     <ImageView
         android:id="@+id/shirtOn"
-        android:layout_width="322dp"
-        android:layout_height="302dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="40dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@+id/bareChest"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.616"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/bareChest"
         app:srcCompat="@drawable/singlet" />
+
+    <View
+        android:id="@+id/pulse"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/solid_greencircle"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/bareChest"
+        app:layout_constraintTop_toTopOf="@+id/bareChest" />
+
+    <ImageView
+        android:id="@+id/cprstance"
+        android:layout_width="298dp"
+        android:layout_height="196dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:adjustViewBounds="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/shirtOn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bareChest"
+        app:layout_constraintVertical_bias="0.817"
+        app:srcCompat="@drawable/cprstance" />
 </android.support.constraint.ConstraintLayout>
