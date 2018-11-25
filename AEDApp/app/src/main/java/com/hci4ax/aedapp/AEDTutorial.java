@@ -37,10 +37,6 @@ public class AEDTutorial extends AppCompatActivity {
         handler = new Handler(getApplicationContext().getMainLooper());
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
-        // hide the ugly navbar for phones without hardware buttons
-        // calls function: onWindowFocusChanged(boolean hasFocus)
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         // add code below
         // define draggables
         lpadDraggable = (ImageView) findViewById(R.id.lpadDraggableImg);
@@ -183,23 +179,6 @@ public class AEDTutorial extends AppCompatActivity {
         handler.postDelayed(t1Speech3, 3000);
         handler.postDelayed(t1Speech4, 6000);
         // end aedTutorial1
-    }
-
-    // code required to hide the navbar when user interacting with screen
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // start onWindowFocusChanged
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-        // end onWindowFocusChanged
     }
 
     // when user initiate long click, start drag (L/R AED pads)

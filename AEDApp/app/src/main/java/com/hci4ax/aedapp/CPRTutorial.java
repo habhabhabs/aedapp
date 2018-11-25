@@ -30,10 +30,6 @@ public class CPRTutorial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cprtutorial);
 
-        // hide the ugly navbar for phones without hardware buttons
-        // calls function: onWindowFocusChanged(boolean hasFocus)
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         handler = new Handler(getApplicationContext().getMainLooper());
         instPrompter = (TextView) findViewById(R.id.instruction_prompter);
@@ -45,23 +41,6 @@ public class CPRTutorial extends AppCompatActivity {
 
         CPRTutorial2();
 
-    }
-
-    // code required to hide the navbar when user interacting with screen
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // start onWindowFocusChanged
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-        // end onWindowFocusChanged
     }
 
 //    Runnable t1speech1, t1speech2;
@@ -193,14 +172,12 @@ public class CPRTutorial extends AppCompatActivity {
                 tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                    tutorial2audio.release();
                     tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech21_tobeginwewilltrytocheckifthepatientresponds);
                     tutorial2audio.start();
                     instPrompter.setText("To begin, we will try to check if the patient responds.");
                     tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            tutorial2audio.release();
                             tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech22_heyheycanyouhearme);
                             tutorial2audio.start();
                             instPrompter.setText("YOU: Hey, Hey! Can you hear me?");
@@ -209,7 +186,6 @@ public class CPRTutorial extends AppCompatActivity {
                             tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
-                                tutorial2audio.release();
                                 instPrompter.setText("(no response)");
                                 }
                             });
@@ -229,21 +205,18 @@ public class CPRTutorial extends AppCompatActivity {
             tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                tutorial2audio.release();
                 tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech23_ifthepatientisnotrespondingtouswewillcheckhispulse);
                 tutorial2audio.start();
                 instPrompter.setText("If the patient is not responding to us, we will check his pulse.");
                 tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                    tutorial2audio.release();
                     tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech20_letstakeacloserlookatthepatient);
                     tutorial2audio.start();
                     instPrompter.setText("Let's take a closer look at the patient.");
                     tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                        tutorial2audio.release();
                         tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech28_noteifthefollowingpatientisgaspingneverassumethatheisabletobreatheon);
                         tutorial2audio.start();
                         instPrompter.setText("NOTE: If the following patient is gasping, NEVER assume that he is able to breathe on his own. In this case, CPR is NEEDED.");
@@ -251,7 +224,6 @@ public class CPRTutorial extends AppCompatActivity {
                             @SuppressLint("WrongConstant")
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                            tutorial2audio.release();
                             final View pulse = (View) findViewById(R.id.pulse);
                             pulse.setVisibility(View.VISIBLE);
                             final ObjectAnimator objAnimator = ObjectAnimator.ofFloat(pulse, "alpha",0f,1f);
@@ -265,20 +237,19 @@ public class CPRTutorial extends AppCompatActivity {
                             tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
-                                pulse.setOnLongClickListener(new View.OnLongClickListener() {
-                                    @Override
-                                    public boolean onLongClick(View v) {
-                                    objAnimator.end();
-                                    long pattern[] = {0,50,0};
-                                    vibrator.vibrate(pattern,-1);
-                                    instPrompter.setText("(no pulse detected)");
-                                    pulse.setVisibility(View.GONE);
-                                    tutorial2audio.release();
-                                    tutorial2audio = null;
-                                    CPRTutorial3();
-                                    return false;
-                                    }
-                                });
+                                    pulse.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            objAnimator.end();
+                                            long pattern[] = {0,50,0};
+                                            vibrator.vibrate(pattern,-1);
+                                            instPrompter.setText("(no pulse detected)");
+                                            pulse.setVisibility(View.GONE);
+
+                                            tutorial2audio = null;
+                                            CPRTutorial3();
+                                        }
+                                    });
                                 }
                             });
                             }
@@ -315,7 +286,6 @@ public class CPRTutorial extends AppCompatActivity {
                         speech3audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                            speech3audio.release();
                             instPrompter.setText("Remove any top clothing from the patient, such as shirts. Hold down clothing to remove from patient.");
                             speech3audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech33_removeanytopclothingfromthepatientsuchasshirtsholddown);
                             speech3audio.start();
@@ -326,16 +296,15 @@ public class CPRTutorial extends AppCompatActivity {
                                 final Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
                                 animation.setDuration(1500); // duration - half a second
                                 animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
-                                shirtOn.setOnTouchListener(new View.OnTouchListener() { // take off shirt
+                                shirtOn.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public boolean onTouch(View v, MotionEvent event) {
+                                    public void onClick(View v) {
                                         shirtOn.startAnimation(animation);
-                                        vibrator.vibrate(500);
+//                                        vibrator.vibrate(500);
                                         shirtOn.setVisibility(View.GONE);
                                         speech3audio.release();
                                         speech3audio = null;
                                         CPRTutorial4();
-                                        return false;
                                     }
                                 });
                                 }
@@ -373,24 +342,11 @@ public class CPRTutorial extends AppCompatActivity {
         t4speech3 = new Runnable() {
             @Override
             public void run() {
-            speech4audio.release();
-            Animation animation = new AlphaAnimation((float) 1, (float) 0); // Change alpha from fully visible to invisible
-            animation.setDuration(700); // duration - half a second
-            animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
-            cprStance.startAnimation(animation);
-            cprStance.setVisibility(View.GONE);
             speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
             speech4audio.start();
             instPrompter.setText("Based on the rhythm of the following vibration snippet, conduct 30 repetitions.");
             long pattern[] = {0,250,0,0};
             vibrator.vibrate(pattern,0);
-            speech4audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    speech3audio.release();
-                }
-            });
-
             }
         };
 
@@ -404,7 +360,6 @@ public class CPRTutorial extends AppCompatActivity {
             speech4audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                speech4audio.release();
                 speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech37_continuedoingsountiltheaedarrivesifnopulsedetectedorwhen);
                 speech4audio.start();
                 instPrompter.setText("Continue doing so until the AED arrives (if no pulse detected), or when the patient has regained consciousness.");

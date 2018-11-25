@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     // enable the vibration in this activity
     Vibrator vibrator;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +29,9 @@ public class MainActivity extends AppCompatActivity {
         // retrieve the layout for the main activity
         setContentView(R.layout.activity_main);
 
-        // hide the ugly navbar for phones without hardware buttons
-        // calls function: onWindowFocusChanged(boolean hasFocus)
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-
+        handler = new Handler(getApplicationContext().getMainLooper());
+        handler.removeCallbacksAndMessages(null);
 
         // fade in the words to start the aed tutorial
         AnimationSet slowFade = new AnimationSet(true);
@@ -90,48 +89,30 @@ public class MainActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 intro.release();
                 // click button to go to next activity (demonstration of aed)
-                aedImg.setOnTouchListener(new View.OnTouchListener() {
+                aedImg.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+                    public void onClick(View v) {
                         Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
                         // create the transition animation - the images in the layouts
                         // of both activities are defined with android:transitionName="robot"
                         ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "aedImg");
                         vibrator.vibrate(100);
                         startActivity(tutorialAct, anim.toBundle());
-                        return false;
                     }
                 });
 
-                introFooter1.setOnTouchListener(new View.OnTouchListener() {
+                introFooter1.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+                    public void onClick(View v) {
                         Intent why = new Intent(getApplicationContext(), CPRTutorial.class);
                         // create the transition animation - the images in the layouts
                         // of both activities are defined with android:transitionName="robot"
                         ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this);
                         vibrator.vibrate(100);
                         startActivity(why, anim.toBundle());
-                        return false;
                     }
                 });
             }
         });
-    }
-
-
-    // code required to hide the navbar when user interacting with screen
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
     }
 }
