@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/barechest" />
+        app:srcCompat="@raw/barechest" />
 
     <ImageView
         android:id="@+id/tutorial_banner"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/aed_aed_tut_banner" />
+        app:srcCompat="@raw/aed_aed_tut_banner" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/aedImgView"
@@ -45,11 +45,9 @@
             android:id="@+id/aedImg"
             android:layout_width="143dp"
             android:layout_height="198dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="0dp"
             android:transitionName="aedImg"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/aedfullblown" />
+            app:srcCompat="@raw/aedfullblown" />
 
         <View
             android:id="@+id/powerCircle"
@@ -133,7 +131,7 @@
             android:layout_marginBottom="3dp"
             app:layout_constraintBottom_toTopOf="@+id/bareChest"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/trainerlpads" />
+            app:srcCompat="@raw/trainerlpads" />
     </LinearLayout>
 
     <LinearLayout
@@ -154,7 +152,7 @@
             android:layout_marginBottom="3dp"
             app:layout_constraintBottom_toTopOf="@+id/bareChest"
             app:layout_constraintEnd_toStartOf="@+id/rpadDraggableImg"
-            app:srcCompat="@drawable/trainerrpads" />
+            app:srcCompat="@raw/trainerrpads" />
     </LinearLayout>
 
     <LinearLayout
