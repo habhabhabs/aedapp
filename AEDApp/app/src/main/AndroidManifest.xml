@@ -14,16 +14,21 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WhyLearnAED" />
-        <activity android:name=".AEDTutorial" />
-        <activity android:name=".CPRTutorial"></activity>
+        <activity android:name=".WhyLearnAED"
+            android:noHistory="true" />
+        <activity android:name=".AEDTutorial"
+            android:noHistory="true" />
+        <activity android:name=".CPRTutorial"
+            android:noHistory="true"
+            ></activity>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.hci4ax.aedapp;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -182,7 +183,8 @@ public class CPRTutorial extends AppCompatActivity {
                             tutorial2audio.start();
                             instPrompter.setText("YOU: Hey, Hey! Can you hear me?");
                             long pattern[] = {0,750,0,0};
-                            vibrator.vibrate(pattern,3);
+                            vibrator.vibrate(pattern,-1);
+                            vibrator.vibrate(pattern,-1);
                             tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
@@ -241,12 +243,9 @@ public class CPRTutorial extends AppCompatActivity {
                                         @Override
                                         public void onClick(View v) {
                                             objAnimator.end();
-                                            long pattern[] = {0,50,0};
-                                            vibrator.vibrate(pattern,-1);
                                             instPrompter.setText("(no pulse detected)");
                                             pulse.setVisibility(View.GONE);
-
-                                            tutorial2audio = null;
+                                            tutorial2audio.release();
                                             CPRTutorial3();
                                         }
                                     });
@@ -303,7 +302,6 @@ public class CPRTutorial extends AppCompatActivity {
 //                                        vibrator.vibrate(500);
                                         shirtOn.setVisibility(View.GONE);
                                         speech3audio.release();
-                                        speech3audio = null;
                                         CPRTutorial4();
                                     }
                                 });
@@ -372,6 +370,7 @@ public class CPRTutorial extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    speech4audio.release();
                     finish();
                     }
                 });
@@ -388,8 +387,12 @@ public class CPRTutorial extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        handler.removeCallbacksAndMessages(null);
+//        super.onBackPressed();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+        System.exit(0);
         finish();
     }
 }

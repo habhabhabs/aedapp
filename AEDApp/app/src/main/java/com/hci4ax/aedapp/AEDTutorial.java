@@ -4,9 +4,11 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ public class AEDTutorial extends AppCompatActivity {
     }
 
     Runnable t0speech1;
+    MediaPlayer speech1audio;
     // step 0: powering on the aed
     private void aedTutorial0() {
         t0speech1 = new Runnable() {
@@ -487,8 +490,12 @@ public class AEDTutorial extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        handler.removeCallbacksAndMessages(null);
+//        super.onBackPressed();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+        System.exit(0);
         finish();
     }
 }
