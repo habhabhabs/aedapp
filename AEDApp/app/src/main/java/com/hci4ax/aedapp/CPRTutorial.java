@@ -343,7 +343,7 @@ public class CPRTutorial extends AppCompatActivity {
             speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
             speech4audio.start();
             instPrompter.setText("Based on the rhythm of the following vibration snippet, conduct 30 repetitions.");
-            long pattern[] = {0,250,0,0};
+            long pattern[] = {0,300,0};
             vibrator.vibrate(pattern,0);
             }
         };

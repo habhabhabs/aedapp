@@ -3,10 +3,12 @@ package com.hci4ax.aedapp;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         handler = new Handler(getApplicationContext().getMainLooper());
         handler.removeCallbacksAndMessages(null);
+
+        ConstraintLayout bgElement = (ConstraintLayout) findViewById(R.id.haha);
+        bgElement.setBackgroundColor(Color.WHITE);
 
         // fade in the words to start the aed tutorial
         AnimationSet slowFade = new AnimationSet(true);
@@ -69,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
         introHeader2.startAnimation(fastFade); // entry fade - fast
         final TextView introFooter1 = (TextView) findViewById(R.id.introFooter1);
         introFooter1.startAnimation(fastFade); // entry fade - fast
-        final TextView introFooter2 = (TextView) findViewById(R.id.introFooter2);
-        introFooter2.startAnimation(fastFade); // entry fade - fast
         final ImageView aedImg = (ImageView) findViewById(R.id.aedImg);
         aedImg.startAnimation(slowFaded); // entry fade - slow delayed
 
@@ -90,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
                 intro.release();
                 // click button to go to next activity (demonstration of aed)
                 aedImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
+                        // create the transition animation - the images in the layouts
+                        // of both activities are defined with android:transitionName="robot"
+                        ActivityOptions anim = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.aedImg), "aedImg");
+                        vibrator.vibrate(100);
+                        startActivity(tutorialAct, anim.toBundle());
+                    }
+                });
+
+                startGameText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent tutorialAct = new Intent(getApplicationContext(), AEDTutorial.class);
