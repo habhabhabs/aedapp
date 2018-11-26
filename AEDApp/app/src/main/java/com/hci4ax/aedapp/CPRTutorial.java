@@ -155,7 +155,7 @@ public class CPRTutorial extends AppCompatActivity {
 //    }
 
     Runnable t2speech1, t2speech2;
-    MediaPlayer tutorial2audio;
+    MediaPlayer tutorial2audio, tutorial2audio1;
     private void CPRTutorial2() {
         t2speech1 = new Runnable() {
             @Override
@@ -189,6 +189,7 @@ public class CPRTutorial extends AppCompatActivity {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
                                 instPrompter.setText("(no response)");
+                                tutorial2audio.release();
                                 }
                             });
                         }
@@ -201,28 +202,28 @@ public class CPRTutorial extends AppCompatActivity {
         t2speech2 = new Runnable() {
             @Override
             public void run() {
-            tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech25_thispatientisnotrespondingtous);
-            tutorial2audio.start();
+            tutorial2audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech25_thispatientisnotrespondingtous);
+            tutorial2audio1.start();
             instPrompter.setText("This patient is not responding to us.");
-            tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            tutorial2audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech23_ifthepatientisnotrespondingtouswewillcheckhispulse);
-                tutorial2audio.start();
+                tutorial2audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech23_ifthepatientisnotrespondingtouswewillcheckhispulse);
+                tutorial2audio1.start();
                 instPrompter.setText("If the patient is not responding to us, we will check his pulse.");
-                tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                tutorial2audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                    tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech20_letstakeacloserlookatthepatient);
-                    tutorial2audio.start();
+                    tutorial2audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech20_letstakeacloserlookatthepatient);
+                    tutorial2audio1.start();
                     instPrompter.setText("Let's take a closer look at the patient.");
-                    tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    tutorial2audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                        tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech28_noteifthefollowingpatientisgaspingneverassumethatheisabletobreatheon);
-                        tutorial2audio.start();
+                        tutorial2audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech28_noteifthefollowingpatientisgaspingneverassumethatheisabletobreatheon);
+                        tutorial2audio1.start();
                         instPrompter.setText("NOTE: If the following patient is gasping, NEVER assume that he is able to breathe on his own. In this case, CPR is NEEDED.");
-                        tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        tutorial2audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @SuppressLint("WrongConstant")
                             @Override
                             public void onCompletion(MediaPlayer mp) {
@@ -234,9 +235,9 @@ public class CPRTutorial extends AppCompatActivity {
                             objAnimator.setRepeatCount(Animation.INFINITE);
                             objAnimator.start();
                             instPrompter.setText("Let's check the patient's if there is any pulse, by holding on the part of the neck as shown below.");
-                            tutorial2audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech30_letscheckthepatientifthereisanypulsebyholding);
-                            tutorial2audio.start();
-                            tutorial2audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            tutorial2audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech30_letscheckthepatientifthereisanypulsebyholding);
+                            tutorial2audio1.start();
+                            tutorial2audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
                                     pulse.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +246,7 @@ public class CPRTutorial extends AppCompatActivity {
                                             objAnimator.end();
                                             instPrompter.setText("(no pulse detected)");
                                             pulse.setVisibility(View.GONE);
-                                            tutorial2audio.release();
+                                            tutorial2audio1.release();
                                             CPRTutorial3();
                                         }
                                     });
@@ -320,7 +321,7 @@ public class CPRTutorial extends AppCompatActivity {
     }
 
     Runnable t4speech1, t4speech3, t4speech4;
-    MediaPlayer speech4audio;
+    MediaPlayer speech4audio, speech4audio1, speech4audio2;
     private void CPRTutorial4() {
         final ImageView cprStance = (ImageView) findViewById(R.id.cprstance);
         t4speech1 = new Runnable() {
@@ -334,17 +335,19 @@ public class CPRTutorial extends AppCompatActivity {
             animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
             cprStance.setVisibility(View.VISIBLE);
             cprStance.startAnimation(animation);
+            speech4audio.release();
             }
         };
 
         t4speech3 = new Runnable() {
             @Override
             public void run() {
-            speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
-            speech4audio.start();
+            speech4audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
+            speech4audio1.start();
             instPrompter.setText("Based on the rhythm of the following vibration snippet, conduct 30 repetitions.");
-            long pattern[] = {0,300,0};
+            long pattern[] = {0,300,0,0};
             vibrator.vibrate(pattern,0);
+            speech4audio1.release();
             }
         };
 
@@ -352,25 +355,24 @@ public class CPRTutorial extends AppCompatActivity {
             @Override
             public void run() {
             vibrator.cancel();
-            speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech36_uponcompletionadministertwobreathstothepatientvia);
-            speech4audio.start();
+            speech4audio2 = MediaPlayer.create(CPRTutorial.this, R.raw.speech36_uponcompletionadministertwobreathstothepatientvia);
+            speech4audio2.start();
             instPrompter.setText("Upon completion, administer two breaths to the patient via the mouth, while pinching the nose.");
-            speech4audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            speech4audio2.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                speech4audio = MediaPlayer.create(CPRTutorial.this, R.raw.speech37_continuedoingsountiltheaedarrivesifnopulsedetectedorwhen);
-                speech4audio.start();
+                speech4audio2 = MediaPlayer.create(CPRTutorial.this, R.raw.speech37_continuedoingsountiltheaedarrivesifnopulsedetectedorwhen);
+                speech4audio2.start();
                 instPrompter.setText("Continue doing so until the AED arrives (if no pulse detected), or when the patient has regained consciousness.");
-                speech4audio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                speech4audio2.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                    speech4audio.release();
+                    speech4audio2.release();
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    speech4audio.release();
                     finish();
                     }
                 });
