@@ -321,33 +321,37 @@ public class CPRTutorial extends AppCompatActivity {
     }
 
     Runnable t4speech1, t4speech3, t4speech4;
-    MediaPlayer speech4audio3, speech4audio4, speech4audio2;
+    MediaPlayer speech4audio1, speech4audio2;
     private void CPRTutorial4() {
         final ImageView cprStance = (ImageView) findViewById(R.id.cprstance);
         t4speech1 = new Runnable() {
             @Override
             public void run() {
-            speech4audio3 = MediaPlayer.create(CPRTutorial.this, R.raw.speech34_locatethegapinthecenterofthecheatandapplythis);
-            speech4audio3.start();
+            speech4audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech34_locatethegapinthecenterofthecheatandapplythis);
+            speech4audio1.start();
             instPrompter.setText("Locate the gap in the center of the chest, and apply this stance while keeping your elbows straight.");
             Animation animation = new AlphaAnimation((float) 0, (float) 1); // Change alpha from fully visible to invisible
             animation.setDuration(700); // duration - half a second
             animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
             cprStance.setVisibility(View.VISIBLE);
             cprStance.startAnimation(animation);
-            speech4audio3.release();
             }
         };
 
         t4speech3 = new Runnable() {
             @Override
             public void run() {
-            speech4audio4 = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
-            speech4audio4.start();
+            speech4audio1 = MediaPlayer.create(CPRTutorial.this, R.raw.speech35_basedontherhythmofthefollowingvibrationsnippetconduct);
+            speech4audio1.start();
             instPrompter.setText("Based on the rhythm of the following vibration snippet, conduct 30 repetitions.");
             long pattern[] = {0,300,0,0};
             vibrator.vibrate(pattern,0);
-            speech4audio4.release();
+            speech4audio1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    speech4audio1.release();
+                }
+            });
             }
         };
 
