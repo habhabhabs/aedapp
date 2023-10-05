@@ -37,6 +37,11 @@ jobs:
         run: ./AEDApp/gradlew wrapper --gradle-version=4.6  # Update Gradle wrapper to version 4.6
       - name: Set Java version compatibility in build.gradle
         run: echo "sourceCompatibility = '10'" >> ./AEDApp/build.gradle  # Set Java version to 10
+      - name: Clean before build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./AEDApp/gradlew clean build sonar --info
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
