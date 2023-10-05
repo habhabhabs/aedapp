@@ -33,7 +33,7 @@ jobs:
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./AEDApp/gradlew  # Grant execution permission
       - name: Update Gradle Wrapper
-        run: ./AEDApp/gradlew wrapper --gradle-version=7.0  # Update Gradle wrapper to version 7.0
+        run: ./AEDApp/gradlew wrapper --gradle-version=4.6  # Update Gradle wrapper to version 4.6
       - name: Set Java version compatibility in build.gradle
         run: echo "sourceCompatibility = '17'" >> ./AEDApp/build.gradle
       - name: Build and analyze
