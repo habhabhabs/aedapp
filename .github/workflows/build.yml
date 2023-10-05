@@ -32,6 +32,10 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./AEDApp/gradlew  # Grant execution permission
+      - name: Update Gradle Wrapper
+        run: ./AEDApp/gradlew wrapper --gradle-version=7.0  # Update Gradle wrapper to version 7.0
+      - name: Set Java version compatibility in build.gradle
+        run: echo "sourceCompatibility = '17'" >> ./AEDApp/build.gradle
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
